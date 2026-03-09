@@ -22,9 +22,18 @@ export async function GET(req: NextRequest) {
 
   const result = await telegram.setWebhook(webhookUrl, secretToken)
 
+  // Also register the slash command menu in Telegram
+  const commandsResult = await telegram.setMyCommands([
+    { command: 'new', description: '📧 Generate a new email address' },
+    { command: 'check', description: '📥 Check your inbox' },
+    { command: 'info', description: 'ℹ️ View your current email' },
+    { command: 'help', description: '📋 Show help menu' },
+  ])
+
   return NextResponse.json({ 
     success: true, 
     webhook_url: webhookUrl,
-    telegram_response: result 
+    telegram_response: result,
+    commands_registered: commandsResult
   })
 }

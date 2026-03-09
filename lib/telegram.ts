@@ -49,6 +49,15 @@ export class TelegramApi {
       secret_token: secretToken
     })
   }
+
+  /**
+   * Sets the bot's command menu visible in Telegram
+   */
+  async setMyCommands(commands: { command: string, description: string }[]) {
+    return this.request('setMyCommands', {
+      commands: commands
+    })
+  }
 }
 
 export const telegram = new TelegramApi()
