@@ -7,20 +7,30 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'TempMail - Free Disposable Temporary Email',
+  metadataBase: new URL('https://gakmail.edgeone.dev'),
+  title: 'GakMail - Free Disposable Temporary Email',
   description: 'Create free temporary email addresses instantly. Protect your privacy from spam and unwanted emails. No registration required. Emails auto-delete after 24 hours.',
-  keywords: ['temp mail', 'temporary email', 'disposable email', 'fake email', 'anonymous email', 'free email'],
+  keywords: ['temp mail', 'temporary email', 'disposable email', 'fake email', 'anonymous email', 'free email', 'gakmail'],
   openGraph: {
-    title: 'TempMail - Free Disposable Temporary Email',
+    title: 'GakMail - Free Disposable Temporary Email',
     description: 'Create free temporary email addresses instantly. Protect your privacy from spam and unwanted emails.',
+    url: 'https://gakmail.edgeone.dev',
+    siteName: 'GakMail',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TempMail - Free Disposable Temporary Email',
+    title: 'GakMail - Free Disposable Temporary Email',
     description: 'Create free temporary email addresses instantly. Protect your privacy from spam.',
   },
-  robots: 'index, follow',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
   icons: {
     icon: [
       {

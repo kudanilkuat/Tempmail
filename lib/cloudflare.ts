@@ -93,7 +93,7 @@ export class CloudflareApi {
       body: JSON.stringify({
         matchers: [{ type: "all" }],
         actions: [{ type: "forward", value: [destinationAddress] }],
-        name: "TempMail Catch-All",
+        name: "GakMail Catch-All",
         enabled: true
       })
     })

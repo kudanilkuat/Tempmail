@@ -33,7 +33,7 @@ export function InboxComponent({ activeEmail, refreshInterval = 10000 }: InboxPr
       let headers: HeadersInit = {}
       
       if (domainPart) {
-        const ownerTokensStr = localStorage.getItem("tempmail_owner_tokens")
+        const ownerTokensStr = localStorage.getItem("gakmail_owner_tokens")
         if (ownerTokensStr) {
           try {
             const ownerTokens = JSON.parse(ownerTokensStr)

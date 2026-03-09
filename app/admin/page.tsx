@@ -181,7 +181,7 @@ export default function AdminPage() {
             <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground flex items-center justify-center">
               <Mail className="w-5 h-5" />
             </div>
-            <span className="font-bold text-xl text-foreground">TempMail Admin</span>
+            <span className="font-bold text-xl text-foreground">GakMail Admin</span>
           </div>
           <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-2">
             <LogOut className="w-4 h-4" />
