@@ -9,12 +9,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized Access' }, { status: 401 })
   }
 
-  // Fallback to determine the host url automagically
-  const host = req.headers.get('host') || 'gakmail.edgeone.dev'
-  // When in production Vercel/EdgeOne, force https.
-  const protocol = host.includes('localhost') ? 'http' : 'https'
+  // Use the safe backend URL configured to avoid proxy subdomains
+  const backendEnv = process.env.NEXT_BACKEND || 'https://gakmail.edgeone.dev/api/webhook'
+  const baseDomain = backendEnv.replace('/api/webhook', '')
   
-  const webhookUrl = `${protocol}://${host}/api/telegram/webhook`
+  const webhookUrl = `${baseDomain}/api/telegram/webhook`
   const secretToken = process.env.TELEGRAM_WEBHOOK_SECRET
 
   if (!secretToken) {
