@@ -1,0 +1,26 @@
+# Cloudflare Worker Configuration
+# https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "tempmail-email-worker"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Email routing configuration
+# The worker will receive emails sent to any address at your domain
+
+# Environment variables (set these in the Cloudflare dashboard or via wrangler secret)
+# WEBHOOK_URL = "https://your-domain.com/api/webhook"
+# WEBHOOK_SECRET = "your-secret-token"
+
+# To deploy:
+# 1. Install wrangler: npm install -g wrangler
+# 2. Login to Cloudflare: wrangler login
+# 3. Set secrets: 
+#    wrangler secret put WEBHOOK_URL
+#    wrangler secret put WEBHOOK_SECRET
+# 4. Deploy: wrangler deploy
+
+# For email routing, you also need to:
+# 1. Go to Cloudflare Dashboard > Email > Email Routing
+# 2. Enable Email Routing for your domain
+# 3. Create a catch-all rule that sends to this worker
