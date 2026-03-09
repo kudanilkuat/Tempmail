@@ -53,7 +53,9 @@ export async function POST(request: NextRequest) {
     try {
       // The destination address must be configured. For now we assume a hardcoded app-wide catchall address
       // e.g catchall@wibuhub.qzz.io that is processed by your worker.
-      const destinationEmail = `catchall@${process.env.NEXT_PUBLIC_EMAIL_DOMAIN}`
+      const rawDomainEnv = process.env.NEXT_PUBLIC_EMAIL_DOMAIN || "gakmail.edgeone.dev"
+      const mainDomain = rawDomainEnv.split(',').map(d => d.trim())[0]
+      const destinationEmail = `catchall@${mainDomain}`
       await cloudflare.setupEmailRouting(domainRecord.cloudflare_zone_id, destinationEmail)
     } catch (cfError: any) {
         return NextResponse.json({ error: `Routing Setup Error: ${cfError.message}` }, { status: 500 })

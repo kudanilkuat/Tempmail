@@ -7,7 +7,8 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { DomainManager } from "@/components/domain-manager"
 import { Mail, Shield, Clock, Zap } from "lucide-react"
 
-const EMAIL_DOMAIN = process.env.NEXT_PUBLIC_EMAIL_DOMAIN || "GakMail.example.com"
+const rawDomainEnv = process.env.NEXT_PUBLIC_EMAIL_DOMAIN || "gakmail.edgeone.dev"
+const EMAIL_DOMAINS = rawDomainEnv.split(',').map(d => d.trim())
 
 export default function HomePage() {
   const [activeEmail, setActiveEmail] = useState("")
@@ -97,7 +98,7 @@ export default function HomePage() {
         <div className="max-w-3xl mx-auto space-y-6">
           {/* Email Generator */}
           <EmailGenerator
-            domain={EMAIL_DOMAIN}
+            domain={EMAIL_DOMAINS[0]}
             availableDomains={availableDomains}
             onEmailChange={setActiveEmail}
           />

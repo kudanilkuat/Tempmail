@@ -23,6 +23,10 @@ export function generateRandomEmail(domain?: string) {
     randomString += chars.charAt(Math.floor(Math.random() * chars.length))
   }
   
-  const selectedDomain = domain || process.env.NEXT_PUBLIC_EMAIL_DOMAIN || "gakmail.edgeone.dev"
+  const rawDomainEnv = process.env.NEXT_PUBLIC_EMAIL_DOMAIN || "gakmail.edgeone.dev"
+  const domains = rawDomainEnv.split(',').map(d => d.trim())
+  const randomFallback = domains[Math.floor(Math.random() * domains.length)]
+
+  const selectedDomain = domain || randomFallback
   return `${randomString}@${selectedDomain}`
 }
