@@ -71,21 +71,31 @@ async function handleStartCommand(chatId: number, firstName: string) {
   `
 
   const message = `
-👋 <b>Welcome to GakMail, ${firstName}!</b>
+👋 <b>Selamat Datang di GakMail, ${firstName}!</b>
 
-Your disposable email is ready:
+🛡️ <b>Apa itu GakMail?</b>
+GakMail adalah layanan email sekali pakai (disposable email) yang dirancang untuk melindungi privasi Anda. Gunakan GakMail untuk:
+• 🔒 Mendaftar di situs tanpa mengungkap email asli Anda
+• 🚫 Menghindari spam dan email promosi yang mengganggu
+• ⚡ Menerima kode verifikasi atau OTP secara instan
+• 🧪 Testing & development tanpa akun email sungguhan
 
-📧 <code>${newEmail}</code>
-<i>(Tap to copy)</i>
+Semua email otomatis terhapus setelah <b>24 jam</b> demi keamanan Anda.
 
-Emails sent to this address will appear when you tap <b>📥 Check Inbox</b> below.
+━━━━━━━━━━━━━━━━━━━
+📧 Email disposable Anda siap digunakan:
 
-Use the buttons to navigate:
-• <b>📧 New Email</b> - Generate a fresh address
-• <b>📥 Check Inbox</b> - Read your messages
-• <b>🔄 Refresh</b> - Reload inbox
-• <b>ℹ️ Info</b> - View current email
-• <b>📋 Menu</b> - Show help
+<code>${newEmail}</code>
+<i>(Ketuk untuk menyalin)</i>
+
+Gunakan tombol di bawah untuk navigasi:
+📧 <b>New Email</b> — Buat alamat email baru
+📥 <b>Check Inbox</b> — Cek pesan masuk
+🔄 <b>Refresh</b> — Muat ulang inbox
+ℹ️ <b>Info</b> — Lihat email aktif saat ini
+📋 <b>Menu</b> — Tampilkan bantuan
+
+🌐 Web: <a href="https://gakmail.edgeone.dev">gakmail.edgeone.dev</a>
 `
   await telegram.sendMessage(chatId, message, 'HTML', MAIN_KEYBOARD)
 }
