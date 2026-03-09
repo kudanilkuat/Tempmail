@@ -33,3 +33,12 @@ export interface Domain {
   is_verified: boolean
   created_at: string
 }
+
+// Telegram User type definition
+export interface TelegramUser {
+  chat_id: number
+  active_email: string
+  owner_token: string
+  created_at: string
+  updated_at: string
+}

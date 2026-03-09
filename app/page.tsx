@@ -7,7 +7,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { DomainManager } from "@/components/domain-manager"
 import { Mail, Shield, Clock, Zap } from "lucide-react"
 
-const EMAIL_DOMAIN = process.env.NEXT_PUBLIC_EMAIL_DOMAIN || "tempmail.example.com"
+const EMAIL_DOMAIN = process.env.NEXT_PUBLIC_EMAIL_DOMAIN || "GakMail.example.com"
 
 export default function HomePage() {
   const [activeEmail, setActiveEmail] = useState("")
@@ -15,7 +15,7 @@ export default function HomePage() {
 
   const fetchGlobalDomains = async () => {
     try {
-      const ownerTokensStr = localStorage.getItem("tempmail_owner_tokens")
+      const ownerTokensStr = localStorage.getItem("GakMail_owner_tokens")
       let headers: HeadersInit = {}
       if (ownerTokensStr) {
         // Send a representative token or all tokens if we implemented it that way.
@@ -52,7 +52,7 @@ export default function HomePage() {
             <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary text-primary-foreground">
               <Mail className="w-5 h-5" />
             </div>
-            <span className="font-bold text-xl text-foreground">TempMail</span>
+            <span className="font-bold text-xl text-foreground">GakMail</span>
           </div>
           <div className="flex items-center gap-2">
             <DomainManager onDomainsUpdated={fetchGlobalDomains} />
@@ -69,7 +69,7 @@ export default function HomePage() {
               Disposable Temporary Email
             </h1>
             <p className="text-lg text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
-              Protect your privacy with a temporary email address. No registration required. 
+              Protect your privacy with a temporary email address. No registration required.
               Receive emails instantly and they auto-delete after 24 hours.
             </p>
 
@@ -96,15 +96,15 @@ export default function HomePage() {
       <main className="container mx-auto px-4 py-6">
         <div className="max-w-3xl mx-auto space-y-6">
           {/* Email Generator */}
-          <EmailGenerator 
-            domain={EMAIL_DOMAIN} 
+          <EmailGenerator
+            domain={EMAIL_DOMAIN}
             availableDomains={availableDomains}
-            onEmailChange={setActiveEmail} 
+            onEmailChange={setActiveEmail}
           />
 
           {/* Inbox */}
-          <InboxComponent 
-            activeEmail={activeEmail} 
+          <InboxComponent
+            activeEmail={activeEmail}
             refreshInterval={10000} // 10 seconds
           />
         </div>
@@ -115,7 +115,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-sm text-muted-foreground mb-4">
-              TempMail provides temporary, disposable email addresses. 
+              GakMail provides temporary, disposable email addresses.
               Perfect for sign-ups, testing, and protecting your real email from spam.
             </p>
             <p className="text-xs text-muted-foreground">
