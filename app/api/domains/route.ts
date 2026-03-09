@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sql } from '@/lib/db'
 import crypto from 'crypto'
+import { cloudflare } from '@/lib/cloudflare'
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,14 +12,14 @@ export async function GET(request: NextRequest) {
       const tokens = ownerTokensHeader.split(',').map(t => t.trim()).filter(Boolean)
       if (tokens.length > 0) {
         domains = await sql`
-          SELECT id, domain, is_public, is_verified, created_at 
+          SELECT id, domain, is_public, is_verified, created_at, nameservers 
           FROM domains 
           WHERE is_public = true OR owner_token = ANY(${tokens}::text[])
           ORDER BY created_at DESC
         `
       } else {
         domains = await sql`
-          SELECT id, domain, is_public, is_verified, created_at 
+          SELECT id, domain, is_public, is_verified, created_at, nameservers 
           FROM domains 
           WHERE is_public = true
           ORDER BY created_at DESC
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest) {
       }
     } else {
       domains = await sql`
-        SELECT id, domain, is_public, is_verified, created_at 
+        SELECT id, domain, is_public, is_verified, created_at, nameservers 
         FROM domains 
         WHERE is_public = true
         ORDER BY created_at DESC
@@ -73,15 +74,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Call Cloudflare to create the zone
+    let cfData;
+    try {
+      cfData = await cloudflare.createZone(domain.toLowerCase());
+    } catch (cfError: any) {
+      return NextResponse.json(
+        { error: `Cloudflare Error: ${cfError.message}` },
+        { status: 400 }
+      )
+    }
+
     // Generate tokens
     const verificationToken = crypto.randomBytes(32).toString('hex')
     const ownerToken = crypto.randomBytes(32).toString('hex')
 
     // Insert into DB
     const result = await sql`
-      INSERT INTO domains (domain, is_public, verification_token, owner_token)
-      VALUES (${domain.toLowerCase()}, ${Boolean(isPublic)}, ${verificationToken}, ${ownerToken})
-      RETURNING id, domain, is_public, verification_token, owner_token, is_verified, created_at
+      INSERT INTO domains (domain, is_public, verification_token, owner_token, cloudflare_zone_id, nameservers)
+      VALUES (${domain.toLowerCase()}, ${Boolean(isPublic)}, ${verificationToken}, ${ownerToken}, ${cfData.zoneId}, ${cfData.nameServers})
+      RETURNING id, domain, is_public, verification_token, owner_token, is_verified, created_at, cloudflare_zone_id, nameservers
     `
 
     return NextResponse.json({ domain: result[0] }, { status: 201 })

@@ -88,17 +88,23 @@ export function DomainManager({ onDomainsUpdated }: DomainManagerProps) {
     }
   }
 
-  const verifyDomain = async (domain: string) => {
+  const verifyDomain = async (domainObj: any) => {
     setLoading(true)
     try {
       const ownerTokensStr = localStorage.getItem("tempmail_owner_tokens")
       const ownerTokens = ownerTokensStr ? JSON.parse(ownerTokensStr) : {}
-      const ownerToken = ownerTokens[domain]
+      const ownerToken = ownerTokens[domainObj.domain]
 
-      const res = await fetch("/api/domains/verify", {
+      let headers: HeadersInit = { "Content-Type": "application/json" }
+      const tokenValues = Object.values(ownerTokens) as string[]
+      if (tokenValues.length > 0) {
+        headers["x-owner-tokens"] = tokenValues.join(',')
+      }
+
+      const res = await fetch("/api/domains/check-ns", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ domain, ownerToken }),
+        headers,
+        body: JSON.stringify({ domainId: domainObj.id }),
       })
       const data = await res.json()
 
@@ -210,30 +216,28 @@ export function DomainManager({ onDomainsUpdated }: DomainManagerProps) {
                       </div>
                       
                       {!domain.is_verified && isOwner && (
-                        <Button size="sm" variant="outline" onClick={() => verifyDomain(domain.domain)} disabled={loading}>
-                          Verify DNS
+                        <Button size="sm" variant="outline" onClick={() => verifyDomain(domain)} disabled={loading}>
+                          Check Status
                         </Button>
                       )}
                     </div>
 
-                    {!domain.is_verified && isOwner && (
+                    {!domain.is_verified && isOwner && domain.nameservers && domain.nameservers.length > 0 && (
                       <div className="mt-4 p-3 bg-muted rounded-md text-sm border">
-                        <p className="mb-2 font-medium">To verify, add this TXT record to your DNS:</p>
-                        <div className="grid grid-cols-[100px_1fr_auto] gap-2 items-center mb-2">
-                          <span className="text-muted-foreground">Type:</span>
-                          <code className="bg-background px-2 py-1 rounded">TXT</code>
-                        </div>
-                        <div className="grid grid-cols-[100px_1fr_auto] gap-2 items-center mb-2">
-                          <span className="text-muted-foreground">Name:</span>
-                          <code className="bg-background px-2 py-1 rounded">@</code>
-                        </div>
-                        <div className="grid grid-cols-[100px_1fr_auto] gap-2 items-center">
-                          <span className="text-muted-foreground">Value:</span>
-                          <code className="bg-background px-2 py-1 rounded truncate">tempmail-verification={domain.verification_token}</code>
-                          <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => copyToClipboard(`tempmail-verification=${domain.verification_token}`, domain.id)}>
-                            {copiedToken === domain.id ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                          </Button>
-                        </div>
+                        <p className="mb-3 font-medium text-amber-600 dark:text-amber-500 flex items-center gap-2">
+                           <AlertCircle className="w-4 h-4" /> Action Required: Change your Nameservers
+                        </p>
+                        <p className="mb-2 text-muted-foreground">To activate this domain, you must log into your domain registrar and change your domain's nameservers to the following Cloudflare nameservers:</p>
+                        
+                        {domain.nameservers.map((ns: string, idx: number) => (
+                           <div key={idx} className="grid grid-cols-[100px_1fr_auto] gap-2 items-center mb-2">
+                             <span className="text-muted-foreground">Nameserver {idx + 1}:</span>
+                             <code className="bg-background px-2 py-1 rounded truncate">{ns}</code>
+                             <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => copyToClipboard(ns, `${domain.id}-${idx}`)}>
+                               {copiedToken === `${domain.id}-${idx}` ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
+                             </Button>
+                           </div>
+                        ))}
                       </div>
                     )}
                   </CardContent>
