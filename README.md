@@ -36,7 +36,6 @@ Protect your privacy, avoid spam, and keep your personal inbox clean. No registr
 4. The worker securely forwards the parsed JSON payload (Subject, HTML Body, Sender) to the \`POST /api/webhook\` route in Next.js.
 5. Next.js saves it into the **Neon Postgres Database**.
 6. The user's browser regularly polls the database and reads the emails linked to their active recipient address.
-
 ---
 
 ## 🛠️ Deploy Your Own
